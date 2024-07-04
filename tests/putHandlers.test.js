@@ -1,18 +1,45 @@
 // eslint-disable-next-line no-undef
-const config = require('../config');
+const config = require("../config");
+const requestBody = {
+  price: 175,
+};
 
-const requestBody = {}
+test("status should be 200", async () => {
+  let actualStatus;
+  try {
+    const response = await fetch(`${config.API_URL}api/v1/products/:1`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
+    actualStatus = response.status;
+  } catch (error) {
+    console.error(error);
+  }
 
-test('', async () => {
-    try {
-		const response = await fetch(`${config.API_URL}/your/endpoint`, {
-			method: 'PUT',
-			headers: {
-			'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(requestBody)
-		});
-	} catch (error) {
-		console.error(error);
-	}
+  expect(actualStatus).toBe(200);
+});
+
+test("response body should match expected", async () => {
+  let actualResponseBody;
+  const expectedResponseBody = {
+    ok: true,
+  };
+
+  try {
+    const response = await fetch(`${config.API_URL}api/v1/products/:1`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
+    actualResponseBody = await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+
+  expect(actualResponseBody).toEqual(expectedResponseBody);
 });
